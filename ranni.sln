@@ -11,6 +11,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "解决方案项", "解决�
 		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ranni", "ranni\ranni.vcxproj", "{D2B69E97-9281-46AD-B5C0-3501444555E3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -27,6 +29,14 @@ Global
 		{29393D24-2ADD-4B52-BB89-4DDBEEDC0EB4}.Release|x64.Build.0 = Release|x64
 		{29393D24-2ADD-4B52-BB89-4DDBEEDC0EB4}.Release|x86.ActiveCfg = Release|Win32
 		{29393D24-2ADD-4B52-BB89-4DDBEEDC0EB4}.Release|x86.Build.0 = Release|Win32
+		{D2B69E97-9281-46AD-B5C0-3501444555E3}.Debug|x64.ActiveCfg = Debug|x64
+		{D2B69E97-9281-46AD-B5C0-3501444555E3}.Debug|x64.Build.0 = Debug|x64
+		{D2B69E97-9281-46AD-B5C0-3501444555E3}.Debug|x86.ActiveCfg = Debug|Win32
+		{D2B69E97-9281-46AD-B5C0-3501444555E3}.Debug|x86.Build.0 = Debug|Win32
+		{D2B69E97-9281-46AD-B5C0-3501444555E3}.Release|x64.ActiveCfg = Release|x64
+		{D2B69E97-9281-46AD-B5C0-3501444555E3}.Release|x64.Build.0 = Release|x64
+		{D2B69E97-9281-46AD-B5C0-3501444555E3}.Release|x86.ActiveCfg = Release|Win32
+		{D2B69E97-9281-46AD-B5C0-3501444555E3}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
