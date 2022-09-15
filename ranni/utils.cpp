@@ -195,6 +195,120 @@ EXIT:
     return ReturnValue;
 }
 
-BOOL UtilLoadDriver(_In_ LPTSTR szDriverName, _In_ LPTSTR szDriverFileName, _In_ LPTSTR szWin32DeviceName, _Out_ HANDLE *pDriver) {}
+BOOL UtilLoadDriver(_In_ LPTSTR szDriverName, _In_ LPTSTR szDriverFileName, _In_ LPTSTR szWin32DeviceName, _Out_ HANDLE *pDriver)
+{
+    BOOL      ReturnValue = FALSE;
+    TCHAR    *pPathSeparator;
+    TCHAR     szDriverPath[MAX_PATH] = TEXT("");
+    DWORD     dwSize;
+    SC_HANDLE hSCM    = NULL;
+    HANDLE    hDriver = NULL;
 
-BOOL UtilUnloadDriver(_In_ HANDLE hDriver, _In_opt_ SC_HANDLE hPassedSCM, _In_ LPTSTR szDriverName) {}
+    *pDriver = NULL;
+
+    dwSize = GetModuleFileName(NULL, szDriverPath, std::size(szDriverPath));
+
+    if (dwSize == 0) {
+        ErrorPrint("GetModuleFileName failed, error code: 0x%x", GetLastError());
+        goto EXIT;
+    }
+
+    pPathSeparator = _tcsrchr(szDriverPath, TEXT('\\'));
+
+    if (pPathSeparator != NULL) {
+        pPathSeparator[1] = TEXT('\0');
+        _tcscat_s(szDriverPath, MAX_PATH, szDriverFileName);
+    } else {
+        ErrorPrint("_tcsrchr failed to find \\ in driver path");
+        goto EXIT;
+    }
+
+    hSCM = OpenSCManager(NULL, NULL, SC_MANAGER_ALL_ACCESS);
+
+    if (hSCM == NULL) {
+        ErrorPrint("OpenSCManager failed, error code: 0x%x", GetLastError());
+        goto EXIT;
+    }
+
+    ReturnValue = UtilUnloadDriver(INVALID_HANDLE_VALUE, hSCM, szDriverName);
+
+    if (ReturnValue == FALSE) {
+        ErrorPrint("UtilUnloadDriver failed");
+        goto EXIT;
+    }
+
+    ReturnValue = UtilCreateService(hSCM, szDriverName, szDriverPath);
+
+    if (ReturnValue == FALSE) {
+        ErrorPrint("UtilCreateService failed");
+        goto EXIT;
+    }
+
+    ReturnValue = UtilStartService(hSCM, szDriverName);
+
+    if (ReturnValue == FALSE) {
+        ErrorPrint("UtilStartService failed");
+        goto EXIT;
+    }
+
+    ReturnValue = UtilOpenDevice(szWin32DeviceName, &hDriver);
+
+    if (ReturnValue == FALSE) {
+        ErrorPrint("UtilOpenDevice failed");
+        goto EXIT;
+    }
+
+    *pDriver = hDriver;
+
+    ReturnValue = TRUE;
+
+EXIT:
+    if (hSCM != NULL) {
+        CloseServiceHandle(hSCM);
+    }
+
+    return ReturnValue;
+}
+
+BOOL UtilUnloadDriver(_In_ HANDLE hDriver, _In_opt_ SC_HANDLE hPassedSCM, _In_ LPTSTR szDriverName)
+{
+    BOOL      ReturnValue = FALSE;
+    SC_HANDLE hSCM        = hPassedSCM;
+
+    if (hSCM == NULL) {
+        hSCM = OpenSCManager(NULL, NULL, SC_MANAGER_ALL_ACCESS);
+
+        if (hSCM == NULL) {
+            ErrorPrint("OpenSCManager failed, error code: 0x%x", GetLastError());
+            goto EXIT;
+        }
+    }
+
+    if (hDriver != NULL && hDriver != INVALID_HANDLE_VALUE) {
+        CloseHandle(hDriver);
+        hDriver = INVALID_HANDLE_VALUE;
+    }
+
+    ReturnValue = UtilStopService(hSCM, szDriverName);
+
+    if (ReturnValue == FALSE) {
+        ErrorPrint("UtilStopService failed");
+        goto EXIT;
+    }
+
+    ReturnValue = UtilDeleteService(hSCM, szDriverName);
+
+    if (ReturnValue == FALSE) {
+        ErrorPrint("UtilDeleteService failed");
+        goto EXIT;
+    }
+
+    ReturnValue = TRUE;
+
+EXIT:
+    if (hPassedSCM == NULL && hSCM != NULL) {
+        CloseServiceHandle(hSCM);
+    }
+
+    return ReturnValue;
+}
