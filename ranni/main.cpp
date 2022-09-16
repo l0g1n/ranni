@@ -20,7 +20,7 @@ int main()
 
     Result = DeviceIoControl(
         hDevice,
-        IOCTL_RANNI_PING,
+        IOCTL_RANNI_BREAKPOINT,
         NULL,
         0,
         NULL,

@@ -24,12 +24,6 @@ extern "C"
         UNREFERENCED_PARAMETER(RegistryPath);
 
         //
-        // initial breakpoint
-        //
-
-        KdBreakPoint();
-
-        //
         // setup unload procedure and dispatchers
         //
 
@@ -130,8 +124,8 @@ NTSTATUS DeviceControl(_In_ PDEVICE_OBJECT DeviceObject, _Inout_ PIRP Irp)
     NTSTATUS           Status        = STATUS_SUCCESS;
 
     switch (StackLocation->Parameters.DeviceIoControl.IoControlCode) {
-        case IOCTL_RANNI_PING: {
-            KdPrint(("HELLO"));
+        case IOCTL_RANNI_BREAKPOINT: {
+            KdBreakPoint();
             break;
         }
 
