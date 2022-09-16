@@ -20,5 +20,5 @@ BOOL UtilWaitForServiceState(_In_ SC_HANDLE hService, _In_ DWORD State);
 
 BOOL UtilOpenDevice(_In_ LPTSTR szWin32DeviceName, _Out_ HANDLE *phDevice);
 
-BOOL UtilLoadDriver(_In_ LPTSTR szDriverName, _In_ LPTSTR szDriverFileName, _In_ LPTSTR szWin32DeviceName, _Out_ HANDLE *pDriver);
-BOOL UtilUnloadDriver(_In_ HANDLE hDriver, _In_opt_ SC_HANDLE hPassedSCM, _In_ LPTSTR szDriverName);
+BOOL UtilLoadDriver(_In_ LPTSTR szDriverName, _In_ LPTSTR szDriverFileName, _In_ LPTSTR szWin32DeviceName, _Out_ HANDLE *pDevice);
+BOOL UtilUnloadDriver(_In_ HANDLE hDevice, _In_opt_ SC_HANDLE hPassedSCM, _In_ LPTSTR szDriverName);

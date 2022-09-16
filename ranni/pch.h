@@ -1,22 +1,20 @@
 ﻿#pragma once
 
-/* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- */
-/* global macros                                                           */
-/* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- */
+//
+// global macros
+//
 
 // TODO
 
-/* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- */
-/* x86 / x64 intrinsic headers                                             */
-/* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- */
+//
+// x86 / x64 intrinsic headers
+//
 
 #include <intrin.h>
 
-/* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- */
-/* C++ headers                                                             */
-/* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- */
-
+//
 // C compatibility headers
+//
 
 #include <cassert>
 #include <cctype>
@@ -40,7 +38,9 @@
 #include <cwchar>
 #include <cwctype>
 
+//
 // C++ 98/03 headers
+//
 
 #include <algorithm>
 #include <bitset>
@@ -75,7 +75,9 @@
 #include <valarray>
 #include <vector>
 
+//
 // C++ 11 headers
+//
 
 #include <array>
 #include <atomic>
@@ -97,11 +99,15 @@
 #include <unordered_map>
 #include <unordered_set>
 
+//
 // C++ 14 headers
+//
 
 #include <shared_mutex>
 
+//
 // C++ 17 headers
+//
 
 #include <any>
 #include <charconv>
@@ -112,7 +118,9 @@
 #include <string_view>
 #include <variant>
 
+//
 // C++ 20 headers
+//
 
 #include <barrier>
 #include <bit>
@@ -130,18 +138,18 @@
 #include <syncstream>
 #include <version>
 
-/* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- */
-/* C / C++ runtime headers                                                 */
-/* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- */
+//
+// C / C++ runtime headers
+//
 
 #include <corecrt.h>
 
 #include <crtdbg.h>
 #include <crtdefs.h>
 
-/* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- */
-/* MFC / ATL headers                                                       */
-/* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- */
+//
+// MFC / ATL headers
+//
 
 #define _WIN32_WINNT _WIN32_WINNT_WIN10
 
@@ -153,15 +161,16 @@
 #include <atlsafe.h>
 #include <atltime.h>
 
-/* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- */
-/* Windows OS-specific headers and libraries                               */
-/* ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- */
+//
+// Windows OS-specific headers and libraries
+//
 
 #define WIN32_LEAN_AND_MEAN
 
 #include <Windows.h>
 
 #include <d3d11.h>
+#include <devioctl.h>
 #include <DbgHelp.h>
 #include <PathCch.h>
 #include <Psapi.h>

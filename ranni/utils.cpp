@@ -69,10 +69,10 @@ EXIT:
 
 BOOL UtilStopService(_In_ SC_HANDLE hSCM, _In_ LPTSTR szDriverName)
 {
-    BOOL           ReturnValue = FALSE;
-    SERVICE_STATUS ServiceStatus;
+    BOOL ReturnValue = FALSE;
 
-    SC_HANDLE hService = OpenService(hSCM, szDriverName, SERVICE_ALL_ACCESS);
+    SC_HANDLE      hService = OpenService(hSCM, szDriverName, SERVICE_ALL_ACCESS);
+    SERVICE_STATUS ServiceStatus;
 
     if (hService == NULL) {
         if (GetLastError() == ERROR_SERVICE_DOES_NOT_EXIST) {
@@ -134,10 +134,10 @@ EXIT:
 
 BOOL UtilGetServiceState(_In_ SC_HANDLE hService, _Out_ DWORD *State)
 {
+    *State = 0;
+
     SERVICE_STATUS_PROCESS ServiceStatus;
     DWORD                  BytesNeeded;
-
-    *State = 0;
 
     if (FALSE == QueryServiceStatusEx(hService, SC_STATUS_PROCESS_INFO, (LPBYTE) &ServiceStatus, sizeof(ServiceStatus), &BytesNeeded)) {
         ErrorPrint("QueryServiceStatusEx failed, error code: 0x%x", GetLastError());
@@ -195,16 +195,17 @@ EXIT:
     return ReturnValue;
 }
 
-BOOL UtilLoadDriver(_In_ LPTSTR szDriverName, _In_ LPTSTR szDriverFileName, _In_ LPTSTR szWin32DeviceName, _Out_ HANDLE *pDriver)
+BOOL UtilLoadDriver(_In_ LPTSTR szDriverName, _In_ LPTSTR szDriverFileName, _In_ LPTSTR szWin32DeviceName, _Out_ HANDLE *pDevice)
 {
-    BOOL      ReturnValue = FALSE;
+    BOOL ReturnValue = FALSE;
+
+    DWORD     dwSize;
     TCHAR    *pPathSeparator;
     TCHAR     szDriverPath[MAX_PATH] = TEXT("");
-    DWORD     dwSize;
-    SC_HANDLE hSCM    = NULL;
-    HANDLE    hDriver = NULL;
+    SC_HANDLE hSCM                   = NULL;
+    HANDLE    hDevice                = NULL;
 
-    *pDriver = NULL;
+    *pDevice = NULL;
 
     dwSize = GetModuleFileName(NULL, szDriverPath, (DWORD) std::size(szDriverPath));
 
@@ -251,14 +252,14 @@ BOOL UtilLoadDriver(_In_ LPTSTR szDriverName, _In_ LPTSTR szDriverFileName, _In_
         goto EXIT;
     }
 
-    ReturnValue = UtilOpenDevice(szWin32DeviceName, &hDriver);
+    ReturnValue = UtilOpenDevice(szWin32DeviceName, &hDevice);
 
     if (ReturnValue == FALSE) {
         ErrorPrint("UtilOpenDevice failed");
         goto EXIT;
     }
 
-    *pDriver = hDriver;
+    *pDevice = hDevice;
 
     ReturnValue = TRUE;
 
@@ -270,7 +271,7 @@ EXIT:
     return ReturnValue;
 }
 
-BOOL UtilUnloadDriver(_In_ HANDLE hDriver, _In_opt_ SC_HANDLE hPassedSCM, _In_ LPTSTR szDriverName)
+BOOL UtilUnloadDriver(_In_ HANDLE hDevice, _In_opt_ SC_HANDLE hPassedSCM, _In_ LPTSTR szDriverName)
 {
     BOOL      ReturnValue = FALSE;
     SC_HANDLE hSCM        = hPassedSCM;
@@ -284,9 +285,9 @@ BOOL UtilUnloadDriver(_In_ HANDLE hDriver, _In_opt_ SC_HANDLE hPassedSCM, _In_ L
         }
     }
 
-    if (hDriver != NULL && hDriver != INVALID_HANDLE_VALUE) {
-        CloseHandle(hDriver);
-        hDriver = INVALID_HANDLE_VALUE;
+    if (hDevice != NULL && hDevice != INVALID_HANDLE_VALUE) {
+        CloseHandle(hDevice);
+        hDevice = INVALID_HANDLE_VALUE;
     }
 
     ReturnValue = UtilStopService(hSCM, szDriverName);
