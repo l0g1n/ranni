@@ -206,7 +206,7 @@ BOOL UtilLoadDriver(_In_ LPTSTR szDriverName, _In_ LPTSTR szDriverFileName, _In_
 
     *pDriver = NULL;
 
-    dwSize = GetModuleFileName(NULL, szDriverPath, std::size(szDriverPath));
+    dwSize = GetModuleFileName(NULL, szDriverPath, (DWORD) std::size(szDriverPath));
 
     if (dwSize == 0) {
         ErrorPrint("GetModuleFileName failed, error code: 0x%x", GetLastError());
